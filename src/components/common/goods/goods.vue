@@ -22,21 +22,32 @@
                                <p class="desc" v-if="item.description">{{item.description}}</p>
                                <p class="sells">月售{{item.sellCount}}份 好评{{item.rating}}%</p>
                                <p class="price"><span class="nowPrice">¥{{item.price}}</span><span v-show="item.oldPrice" class="oldPrice">¥{{item.oldPrice}}</span></p>
+                                <div class="control-wrap">
+                                    <cart-control :food="item"></cart-control>
+                                </div>
                             </div>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
+        <shopcart  :delivery-price="seller.deliveryPrice"
+              :min-price="seller.minPrice" :select-foods="selectFoods"></shopcart>  
     </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
+import shopcart from '@/components/common/shopcart/shopcart'
+import cartControl from '@/components/common/cartControl/cartControl'
     export default {
         props: {
              seller: Object,
              goods: Array
+        },
+        components: {
+            shopcart,
+            cartControl
         },
         data () {
             return {
@@ -67,7 +78,7 @@ import BScroll from 'better-scroll'
             _foodsScroll () {
                this.foodsScroll.on('scroll', (pos) => {
                     this.scrollY = Math.abs(Math.round(pos.y))
-                    console.log(this.scrollY)
+                   // console.log(this.scrollY)
                     // this.$refs.menuWrap.querySelector('.active').scrollIntoView()
                }) 
             },
@@ -102,13 +113,25 @@ import BScroll from 'better-scroll'
                }
                this.menuScroll&&this.menuScroll.scrollToElement(this.$refs.menuWrap.querySelector('.active'))
                return 0
+           },
+           selectFoods () {
+               let foods = []
+               this.goods.forEach((good) => {
+                   good.foods.forEach((food) => {
+                       if (food.count) {
+                           foods.push(food) 
+                       }
+                   })
+               })
+               return foods
            }
         }
     }
 </script>
 
 <style scoped lang='stylus'>
-@import '../../../common/style/mixin.styl'
+// @import '../../../common/style/mixin.styl'
+@import '../../../common/style/index.styl'
 .goods
     display:flex
     position :absolute
@@ -191,6 +214,8 @@ import BScroll from 'better-scroll'
                       width:56px
                       height:56px
                 .foods-info
+                    position: relative
+                    width:100%
                     p
                       color:rgb(147,153,159)
                       font-size :10px
@@ -209,5 +234,10 @@ import BScroll from 'better-scroll'
                              color:rgb(147, 153, 159)
                              font-size :10px 
                              text-decoration:line-through
-
+                    .control-wrap
+                        position :absolute
+                        right :0
+                        bottom:-5px
+                        z-index :10
 </style>
+
