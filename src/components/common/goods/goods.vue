@@ -13,7 +13,7 @@
                 <li class="foods-type foods-type-hock" v-for="(good,index) in goods" :key="index">
                     <p>{{good.name}}</p>
                     <ul v-if="good.foods.length">
-                        <li class="foods-item" v-for='(item,index) in good.foods'  :key="index">
+                        <li class="foods-item" v-for='(item,index) in good.foods'  :key="index" @click="currentFood(item,$event)">
                             <div class="foods-icon">
                                 <img :src="item.icon" alt="">
                             </div>
@@ -33,6 +33,7 @@
         </div>
         <shopcart  :delivery-price="seller.deliveryPrice"
               :min-price="seller.minPrice" :select-foods="selectFoods"></shopcart>  
+        <food-detail ref="foodDetail" :food='food'></food-detail>
     </div>
 </template>
 
@@ -40,6 +41,7 @@
 import BScroll from 'better-scroll'
 import shopcart from '@/components/common/shopcart/shopcart'
 import cartControl from '@/components/common/cartControl/cartControl'
+import foodDetail from '@/components/common/foodDetail/foodDetail'
     export default {
         props: {
              seller: Object,
@@ -47,12 +49,14 @@ import cartControl from '@/components/common/cartControl/cartControl'
         },
         components: {
             shopcart,
-            cartControl
+            cartControl, 
+            foodDetail
         },
         data () {
             return {
                 scrollY: 0,
-                foodsHeight: []
+                foodsHeight: [],
+                food: {}
             }
         },
         created () {
@@ -99,6 +103,13 @@ import cartControl from '@/components/common/cartControl/cartControl'
                 // menu点击后改变
                 this.$refs.menuWrap.querySelector('.active').classList.remove('active')
                 this.$refs.menuWrap.querySelectorAll('.menu-item-hock')[index].classList.add('active')
+            },
+            currentFood (food, e) {
+                if (!e._constructed) {
+                    return 
+                }
+                this.food = food
+                this.$refs.foodDetail.show()
             }
         },
         computed: {

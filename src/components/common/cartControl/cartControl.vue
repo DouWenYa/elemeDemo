@@ -1,12 +1,12 @@
 <template>
     <div class="cart-control">
         <transition name="fade">
-            <div class="decrese_btn" v-show="food.count>0" @click='decrese'>
+            <div class="decrese_btn" v-show="food.count>0" @click.stop.prevent='decrese'>
                 <i class="iconfont icon-decrese"></i>
             </div>
         </transition>
         <div class="current_num" v-show="food.count>0">{{food.count}}</div>
-        <div class="add_btn" @click="add">
+        <div class="add_btn" @click.stop.prevent="add">
             <i class="iconfont icon-add"></i>
         </div>
     </div>

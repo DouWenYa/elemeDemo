@@ -103,12 +103,14 @@ import cartControl from '@/components/common/cartControl/cartControl'
             },
             listShow () {
                  if (!this.totalCount) {
+                     /* eslint-disable */
                     this.isShow = true
                      return false
                  }
                  if (!this.isShow) {
                     this.$nextTick(() => {
                         if (!this.scroll) {
+                            /* eslint-disable */ 
                         this.scroll = new BScroll(this.$refs.listWrap, {
                             click: true
                         })
@@ -140,7 +142,7 @@ import cartControl from '@/components/common/cartControl/cartControl'
                 this.isShow = !this.isShow
             },
             payment () {
-                if (this.totalPrice>this.minPrice) {
+                if (this.totalPrice > this.minPrice) {
                     if (!this.isShow) {
                           this.isShow = !this.isShow 
                     }
