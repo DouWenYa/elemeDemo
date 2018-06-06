@@ -32,6 +32,13 @@
                     <p>{{food.info}}</p>
                 </div>
             </div>
+            <div class="rating-wrap">
+                <p class="title">商品评价</p>
+                <div class="ratingSelect-wrap">
+                    <rating-select :ratings="food.ratings"></rating-select>
+                </div>
+                <div class="rating-lists"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -40,6 +47,7 @@
 import BScroll from 'better-scroll'
 import Vue from 'vue'
 import cartControl from '@/components/common/cartControl/cartControl'
+import ratingSelect from '@/components/common/ratingSelect/ratingSelect'
     export default {
         props: {
             food: Object
@@ -55,7 +63,7 @@ import cartControl from '@/components/common/cartControl/cartControl'
                if (!this.scroll) {
                     this.scroll = new BScroll(this.$refs.wrapper, {
                         click: 'click',
-                        probeType:2
+                        probeType: 2
                     })
                } else {
                    this.scroll.refresh()
@@ -73,7 +81,8 @@ import cartControl from '@/components/common/cartControl/cartControl'
            }
        },
        components: {
-           cartControl
+           cartControl,
+           ratingSelect
        }
     }
 </script>
@@ -161,6 +170,10 @@ import cartControl from '@/components/common/cartControl/cartControl'
                     color:rgb(77,85,93)
                     font-size :12px
                     line-height :2
-
+        .rating-wrap
+            .title
+                font-size :14px
+                color:rgb(7,17,27)
+                margin:18px 18px 0
 
 </style>
