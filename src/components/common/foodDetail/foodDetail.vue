@@ -35,7 +35,7 @@
             <div class="rating-wrap">
                 <p class="title">商品评价</p>
                 <div class="ratingSelect-wrap">
-                    <rating-select :ratings="food.ratings"></rating-select>
+                    <rating-select :ratings="food.ratings" :onlysee-type="onlyseeType" :active-type="activeType" @tabSelect="ratingType($event)" @onlySelct="onlyType($event)"></rating-select>
                 </div>
                 <div class="rating-lists"></div>
             </div>
@@ -54,7 +54,14 @@ import ratingSelect from '@/components/common/ratingSelect/ratingSelect'
         },
        data () {
            return {
-              isShow: false 
+              isShow: false,
+              desc: {
+                    positive: '推荐',
+                    negative: '吐槽',
+                    all: '全部'
+                },
+              onlyseeType: false,
+              activeType: 2
            }
        },
        methods: {
@@ -78,6 +85,12 @@ import ratingSelect from '@/components/common/ratingSelect/ratingSelect'
                    return 
                }
             Vue.set(this.food, 'count', 1)
+           },
+           ratingType (type) {
+               this.activeType = type
+           },
+           onlyType (type) {
+               this.onlyseeType = type
            }
        },
        components: {
