@@ -291,7 +291,7 @@ import cartControl from '@/components/common/cartControl/cartControl'
         width:100%
         height:100%
         background :rgba(7,17,27,.6)
-        filter :blur(10px)
+        //filter :blur(10px)
 .mask-enter-active, .mask-leave-active
     transition: all .5s
 .mask-enter, .mask-leave-to

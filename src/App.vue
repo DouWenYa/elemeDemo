@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <router-view :seller="seller" :goods="goods"></router-view>
+    <router-view :seller="seller" :ratings="ratings" :goods="goods"></router-view>
   </div>
 </template>
 
@@ -26,7 +26,8 @@ export default {
   data () {
     return {
       seller: {},
-      goods: []
+      goods: [],
+      ratings: []
       }
   },
   components: {
@@ -38,7 +39,8 @@ export default {
       if (res.status === 200) {
         this.seller = res.data.seller
         this.goods = res.data.goods
-        console.log(res.data.goods)
+        this.ratings = res.data.ratings
+        console.log(res.data.seller)
       }
     })
   }

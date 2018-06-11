@@ -9,7 +9,7 @@
                 <span class="item">{{desc.positive}}</span>
                 <span class="num">{{positives.length}}</span>
             </li>
-            <li class='select-item negative' :class="{active:activeType==1}"  @click="$emit('tabSelect',1)">
+            <li class='select-item negative' :class="{active:activeType==1}" @click="$emit('tabSelect',1)">
                 <span class="item">{{desc.negative}}</span>
                 <span class="num">{{negatives.length}}</span>
             </li>
@@ -24,7 +24,7 @@
 <script>
 const POSITIVE = 0
 const NEGATIVE = 1
-const ALL = 2
+// const ALL = 2
 export default {
     props: {
         desc: {
@@ -38,7 +38,7 @@ export default {
             }
         },
         onlyseeType: Boolean,
-        activeType:Number,
+        activeType: Number,
         ratings: Array
     },
     computed: {
@@ -60,6 +60,7 @@ export default {
                 return
             }
             this.$emit('onlySelct', !this.onlyseeType)
+            // console.log(this.onlyseeType)
         }
     }
 }

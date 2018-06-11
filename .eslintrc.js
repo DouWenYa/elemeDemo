@@ -35,6 +35,7 @@ module.exports = {
     'no-labels': 0,
     'no-unused-expressions':0,
     'space-infix-ops':0,
-    'vue/no-parsing-error': [2, { "x-invalid-end-tag": false,'unexpected-character-in-attribute-name':false }] 
+    'vue/no-parsing-error': [2, { "x-invalid-end-tag": false,'unexpected-character-in-attribute-name':false }],
+    'no-irregular-whitespace':0
   }
 }

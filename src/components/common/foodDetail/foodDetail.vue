@@ -1,4 +1,5 @@
 <template>
+<transition name="fade">
     <div class="food-detail" v-show='isShow' ref="wrapper">
         <div class="food-container">
             <div class="food-banner">
@@ -37,17 +38,43 @@
                 <div class="ratingSelect-wrap">
                     <rating-select :ratings="food.ratings" :onlysee-type="onlyseeType" :active-type="activeType" @tabSelect="ratingType($event)" @onlySelct="onlyType($event)"></rating-select>
                 </div>
-                <div class="rating-lists"></div>
+                <ul class="rating-lists">
+                    <li class="rating-item" v-for="(info,index) in selectRating" :key="index">
+                        <div class="head">
+                            <span class="date">{{info.rateTime|formatDate}}</span>
+                            <div class="user">
+                               <span class="username">{{info.username}}</span>
+                               <img :src="info.avatar" alt="">
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <span class="iconfont icon-thumbdown" :class='{"icon-thumbup":info.rateType===0,"icon-thumbdown":info.rateType===1}'></span>
+                            <span class="text" v-show="info.text">{{info.text}}</span>
+                        </div>
+                    </li>
+                    <li class="no-rating" v-show="!selectRating.length">
+                        暂无评论
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
+</transition>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import Vue from 'vue'
+// 引入格式化事件工具
+import moment from 'moment'
+// 引入时区
+import 'moment/locale/zh-cn'
+// 引入自己的公用时间格式化方法
+import {formatDate} from '@/common/js/date'
 import cartControl from '@/components/common/cartControl/cartControl'
 import ratingSelect from '@/components/common/ratingSelect/ratingSelect'
+// 使用中国时间
+moment.locale('zh-cn')
     export default {
         props: {
             food: Object
@@ -64,18 +91,37 @@ import ratingSelect from '@/components/common/ratingSelect/ratingSelect'
               activeType: 2
            }
        },
+       computed: {
+           selectRating () {
+               let select = []
+               if (this.activeType===2) {
+                   select = this.food.ratings
+               } else {
+                   select = this.food.ratings.filter((rating) => {
+                       return this.activeType === rating.rateType
+                   })
+               }
+               if (this.onlyseeType) {
+                   select = select.filter((rate) => {
+                       return !!rate.text
+                   })
+               }
+               return select
+           }
+       },
        methods: {
            show () {
                 this.isShow = true
                if (!this.scroll) {
-                    this.scroll = new BScroll(this.$refs.wrapper, {
-                        click: 'click',
-                        probeType: 2
-                    })
+                   this.$nextTick(() => {
+                       this.scroll = new BScroll(this.$refs.wrapper, {
+                           click: 'click',
+                           probeType: 2
+                       })
+                   })
                } else {
                    this.scroll.refresh()
                }
-               console.log(this.scroll)
            },
            hide () {
                this.isShow = false
@@ -88,15 +134,29 @@ import ratingSelect from '@/components/common/ratingSelect/ratingSelect'
            },
            ratingType (type) {
                this.activeType = type
+               this.$nextTick(() => {
+                   this.scroll.refresh()
+               }) 
            },
            onlyType (type) {
                this.onlyseeType = type
+               this.$nextTick(() => {
+                   this.scroll.refresh()
+               })
            }
        },
        components: {
            cartControl,
            ratingSelect
+       },
+       filters: {
+           formatDate (date) {
+               // return moment(date).format('YYYY-MM-DD hh:mm')
+               // 使用自己的方法
+              return formatDate(date, 'YYYY-MM-DD hh:mm')
+           }
        }
+
     }
 </script>
 
@@ -188,5 +248,37 @@ import ratingSelect from '@/components/common/ratingSelect/ratingSelect'
                 font-size :14px
                 color:rgb(7,17,27)
                 margin:18px 18px 0
-
+        .rating-lists
+            padding:0 18px
+            box-sizing:border-box
+            .rating-item
+                padding:16px 0
+                border-1px(rgba(7,17,27,.1))
+                .head
+                    display:flex
+                    justify-content space-between
+                    margin-bottom:6px
+                    .date
+                       color:rgb(147,153,159)
+                       font-size :10px
+                    .user
+                        color:rgb(147,153,159)
+                        font-size :10px
+                        .username
+                            display: inline-block
+                        img
+                            width:12px
+                            height:12px
+                .bottom
+                    font-size :12px
+            .no-rating
+                font-size :12px 
+                color:rgb(147,153,159)
+                padding:18px
+                text-align :center
+.fade-enter-active, .fade-leave-active
+    transform :translate3d(0,0,0)
+    transition: all .5s
+.fade-enter, .fade-leave-to
+  transform :translate3d(100%,0,0)
 </style>
