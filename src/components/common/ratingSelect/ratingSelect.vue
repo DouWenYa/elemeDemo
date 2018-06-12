@@ -44,7 +44,7 @@ export default {
     computed: {
         positives () {
             return this.ratings.filter((pos) => {
-                console.log(pos)
+               // console.log(pos)
                 return pos.rateType === POSITIVE
             })
         },

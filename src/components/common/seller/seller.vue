@@ -35,29 +35,103 @@
                     </div>
                 </div>
             </div>
+            <split></split>   
+            <div class="activity-wrap">
+                <div class="desc">
+                    <p class="title">公告与活动</p>
+                    <p class="text">{{seller.bulletin}}</p>
+                </div>
+                <ul class="discount-list">
+                    <li v-for="(item,index) in seller.supports" :key="index" class="item">
+                        <span class="icon" :class="iconMap[item.type]"></span>
+                        <span class="text">{{item.description}}</span>
+                    </li>
+                </ul>
+            </div>
+            <split></split> 
+            <div class="seller-image">
+                <p class="title">商家实景</p>
+                <div class="image-wrap" ref="imgwrap">
+                    <ul class="image-scroller" ref="scroller">
+                        <li class="image-item" v-for='(img,index) in seller.pics' :key="index">
+                            <img :src="img" alt="">
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <split></split>
+            <div class="seller-info">
+                <p class="title">
+                    商家信息
+                </p>
+                <ul class="info-list">
+                    <li class="info-item" v-for="(info,index) in seller.infos" :key="index">{{info}}</li>
+                </ul>
+            </div>
         </div>
 
     </div>
 </template>
 
 <script>
-// import BScroll from 'better-scroll'
+import BScroll from 'better-scroll'
 import star from '@/components/common/star/star'
+import split from '@/components/common/split/split'
     export default {
         props: {
             seller: Object
         },
         components: {
-            star
+            star,
+            split
         },
         data () {
             return {
-                isCollected: false
+                isCollected: false,
+                iconMap: ['decrease', 'discount', 'special', 'invoice', 'guarantee']
             }
+        },
+        watch: {
+            seller () { // 防止props异步传值，mounted时页面高度计算有误
+                 this._pageInitScroll()
+                 this._picInitScroll()
+            }
+        },
+        mounted () {
+            this.$nextTick(() => {
+                 this._pageInitScroll()
+                 this._picInitScroll()
+            })
         },
         methods: {
             addCollect () {
                 this.isCollected = !this.isCollected
+            },
+            _picInitScroll () {
+               let picWidth = 120
+                let margin = 6
+                let len = this.seller.pics.length
+                let picTotalWidth = (picWidth + margin)*len - margin + 'px'
+               // console.log(this.seller.pics.length)
+                this.$refs.scroller.style.width = picTotalWidth
+                if (!this.picScroll) {
+                    this.picScroll = new BScroll(this.$refs.imgwrap, {
+                        scrollX: true,
+                        eventPassthrough: 'vertical'
+                    })
+                } else {
+                    this.picScroll.refresh()
+                } 
+            },
+            _pageInitScroll () {
+                if (!this.scroll) {
+                    this.scroll = new BScroll(this.$refs.wrapper, {
+                        click: true,
+                        probeType: 2
+                    })
+                } else {
+                    this.scroll.refresh()
+                }
             }
         }
     }
@@ -146,7 +220,90 @@ import star from '@/components/common/star/star'
                         font-size :10px
                         color:rgb(7,17,27)
                         line-height :24px
-
+      .activity-wrap
+         padding:18px 18px 0
+         .desc
+            padding-bottom:16px
+            border-1px(rgba(7,17,27,.1))
+            .title
+               font-size :14px 
+               color:rgb(7,17,27)
+               line-height 14px
+               margin-bottom:8px
+            .text
+               padding:0 12px
+               font-size :12px 
+               color:rgb(240,20,20)
+               line-height 24px
+         .discount-list
+            .item
+                padding:16px
+                border-1px(rgba(7,17,27,.1))
+                font-size:0
+                &:last-child
+                    border-none()
+                .icon
+                    display:inline-block
+                    width:15px
+                    height :15px
+                    margin-right:4px
+                    background-size :15px 15px
+                    background-repeat: no-repeat
+                    &.decrease
+                        bg-image('../Header/decrease_1')
+                    &.discount
+                        bg-image('../Header/discount_1')
+                    &.special
+                        bg-image('../Header/special_1')
+                    &.invoice
+                        bg-image('../Header/invoice_1')
+                    &.guarantee
+                        bg-image('../Header/guarantee_1')
+                .text
+                    display :inline-block
+                    font-size :12px
+                    line-height 16px
+                    color:rgb(7,17,27)
+                    vertical-align :top
+      .seller-image
+         padding: 18px
+        .title
+           font-size :14px 
+           color:rgb(7,17,27)
+           line-height 14px
+           margin-bottom:12px
+        .image-wrap
+            width:100%
+            overflow :hidden
+            //.image-scroller
+            .image-item
+                width:120px
+                height:90px
+                margin-right:6px
+                float :left
+                &:last-child
+                    margin:0
+                img 
+                    width:100%
+                    height:100%
+      .seller-info
+        padding: 18px 18px 0 18px
+        .title
+           font-size :14px 
+           color:rgb(7,17,27)
+           line-height 14px
+           padding-bottom:12px
+           margin:0
+           border-1px(rgba(7,17,27,.1))
+        .info-list
+            .info-item
+                padding:16px 12px
+                font-size:12px 
+                color:rgb(7,17,27)
+                line-height 16px
+                border-1px(rgba(7,17,27,.1))
+                &:last-child
+                    border-none()
 
 </style>
 

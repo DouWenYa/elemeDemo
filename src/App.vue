@@ -2,17 +2,19 @@
   <div id="app">
     <v-header :seller='seller'></v-header>
     <div class="nav_bar border-1px">
-      <router-link class="nav_item" :to='{name:"goods"}'>商品</router-link>
-      <router-link class="nav_item" :to='{name:"ratings"}'>评论</router-link>
-      <router-link class="nav_item" :to='{name:"seller"}'>商家</router-link>
+      <router-link class="nav_item" :to='{name:"goods"}' tag="div">商品</router-link>
+      <router-link class="nav_item" :to='{name:"ratings"}' tag="div">评论</router-link>
+      <router-link class="nav_item" :to='{name:"seller"}' tag="div">商家</router-link>
       <div class="close">
         <!-- <img src="/static/icon/add_circle.svg" alt=""> -->
         <!-- <span class="icon-more"></span> -->
         
       </div>
     </div>
-
+    <!-- 缓存组件 -->
+<keep-alive>
     <router-view :seller="seller" :ratings="ratings" :goods="goods"></router-view>
+</keep-alive>
   </div>
 </template>
 
