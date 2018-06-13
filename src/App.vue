@@ -37,7 +37,7 @@ export default {
     goods
   },
   created () {
-    axios.get('/static/data.json').then((res) => {
+    axios.get('./static/data.json').then((res) => {
       if (res.status === 200) {
         this.seller = res.data.seller
         this.goods = res.data.goods
